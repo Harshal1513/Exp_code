@@ -1,0 +1,63 @@
+MyController.java
+
+package com.example.studentApi4;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class MyController {
+    @GetMapping("/")
+    public String show1() {
+        return ("<h1> Hello World </h1>");
+    }
+    @GetMapping("/USER")
+    public String show2(){
+        return ("<h1> hello welcome to USER PAGE </h1>");
+    }
+    @GetMapping("/ADMIN")
+    public String show3() {
+        return ("<h1> hello welcome to ADMIN PAGE</h1>");
+
+    }
+}
+
+SecurityConfiguration.java
+
+package com.example.studentApi4;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+@EnableWebSecurity
+@Configuration
+public class SecurityConfiguration {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        http.authorizeHttpRequests()
+                .requestMatchers("/ADMIN").hasRole("ADMIN")
+                .requestMatchers("/USER").hasRole("USER")
+                .requestMatchers("/").permitAll()
+                .and().formLogin();
+        return http.build();
+    }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails x = User.withDefaultPasswordEncoder()
+                .username("Student")
+                .password("1234")
+                .roles("USER")
+                .build();
+
+        UserDetails y = User.withDefaultPasswordEncoder()
+                .username("Principle")
+                .password("4321")
+                .roles("ADMIN","USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(x, y);
+    }
+}
