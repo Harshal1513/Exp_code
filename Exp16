@@ -1,0 +1,69 @@
+Controller Class
+
+package com.example.Experiment16;
+
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
+@RestController
+public class Controllers {
+	ArrayList<Integer> a = new ArrayList<>();
+	private List<Details> data = new ArrayList<>();
+	public Controllers() {
+		a.add(1);
+		a.add(2);
+	}
+	@GetMapping("/hello/{name}/{age}")
+	public void insert (@PathVariable("name") String name,@PathVariable("age") int age) {
+		System.out.println(name);
+		System.out.println(age);
+	}
+	@DeleteMapping("/hello/{id}")
+	public void deleteById(@PathVariable("id") int id) {
+		a.remove(Integer.valueOf(id));
+		print();
+	}
+	@PostMapping("/EnterDetails")
+	public String insert(@RequestBody Details ob) {
+		date.add(new Details(ob.getNumber(),ob.getName()));
+		for (Details obd : data) {
+			System.out.println(obd.getName() +""+ obd.getNumber());
+		}
+		return "data Inserted";
+	}
+	void print() {
+		for (int element : a) {
+			System.out.println(element + "");
+		}
+		system.out.println();
+	}
+
+}
+
+Details class
+
+package com.example.Experiment16;
+
+public class Details {
+	public int number;
+	public String name;
+	public Details(int number, String name) {
+		this.number = number;
+		this.name = name;
+	}
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;	
+		}
+	public String toString() {
+		return "Details(" + "number=" + number + ",name='"+name+'\''+'}';
+	}
+}
