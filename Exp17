@@ -1,0 +1,131 @@
+EXPERIMENT:17
+ Create User Resigtration form with Spring REST Controller and
+ Versioning REST API.
+ Step 1: Create a Spring Boot Project:
+Use Spring Initializr (https://start.spring.io) to generate a new Spring Boot project. Now fill
+ all the details such as:
+  Project = maven
+  Language = java
+  Spring boot = 3.3.4
+  Group=com.example
+  Artifacts = registration
+  Packaging = jar
+
+ Select the following dependencies:- 
+Spring Web- Spring Data MongoDB
+ Click on Generate and extract the zip file on your desktop.
+
+ Step 2: Now open the extracted file in VsCode.
+
+Step 4: Then create model, repository, and controller folder in
+ src/main/java/com/example/registration.
+
+ Step 5: In model folder, create a User.java file and add the following code:
+
+ package com.example.registration.model;
+ import org.springframework.data.annotation.Id;
+ import org.springframework.data.mongodb.core.mapping.Document;
+ @Document(collection = "users")
+ public class User {
+ @Id
+ private String id;
+ private String username;
+ private String password;
+ // Getters and Setters
+ public String getId() {
+ return id;
+ }
+ public void setId(String id) {
+ this.id = id;
+ }
+ public String getUsername() {
+ return username;
+ }
+ public void setUsername(String username) {
+ this.username = username;
+ }
+ public String getPassword() {
+ return password;
+}
+ public void setPassword(String password) {
+ this.password = password;
+ }
+ }
+
+ Step 6: In the repository folder, create a UserRepository.java file and add the following code:
+
+ package com.example.registration.repository;
+ import com.example.registration.model.User;
+ import org.springframework.data.mongodb.repository.MongoRepository;
+ public interface UserRepository extends MongoRepository<User, String> {
+ }
+
+ Step 7: In the controller folder, create a UserController.java file and add the following code:
+
+ package com.example.registration.controller;
+ import com.example.registration.model.User;
+ import com.example.registration.repository.UserRepository;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
+ @RestController
+ @RequestMapping("/api/v1/users")
+ public class UserController {
+ private final UserRepository userRepository;
+ public UserController(UserRepository userRepository) {
+ this.userRepository = userRepository;
+ }
+ @PostMapping("/register")
+ public ResponseEntity<User> registerUser(@RequestBody User user) {
+ User savedUser = userRepository.save(user);
+ return ResponseEntity.ok(savedUser);
+ }
+ }
+
+ Step 8: In the Controller folder, create another file named UserControllerV2.java and add
+ the following code:
+
+ package com.example.registration.controller;
+ import com.example.registration.model.User;
+ import com.example.registration.repository.UserRepository;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
+ @RestController
+ @RequestMapping("/api/v2/users")
+ public class UserControllerV2 {
+ private final UserRepository userRepository;
+ public UserControllerV2(UserRepository userRepository) {
+}
+ this.userRepository = userRepository;
+ @PostMapping("/register")
+ public ResponseEntity<User> registerUser(@RequestBody User user) {
+ // Save the user to the database
+ User savedUser = userRepository.save(user);
+ return ResponseEntity.ok(savedUser);
+ }
+ }
+
+ Step 9: Open MongoDB Compass and add a new connection. Now in the same connection
+ create a database named “registration_db”. Make sure that the connection is running in your
+ local machine.
+
+ Step 10: In the resources folder, open application.properties and add the following
+
+Step 11: Now to run the application, Go to SprinBoot Dashboard and click on run. It will run
+ on the default port `8080`. You can now access the endpoints and test the RESTful API.
+
+ Step 12: To test the RESTful API, use the Postman tool to interact with the RESTful service:--
+
+ Go to menu, select file-> new
+ Select http method.
+  ToaddNewEmployee:----
+ Select POST method
+ In URL type http://localhost:8080/api/v1/users/register
+ Go to body, Select raw.
+ Type the following code and send the request
+ Sample JSON body:
+ {
+ "username": "mmpcse",
+ "password": "mmp123"
+ }
+
+Step 13: Now go back to MongoDB to view the user details stored.
