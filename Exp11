@@ -1,0 +1,11 @@
+MyFirstComponent.jsx
+
+import React from 'react'
+const MyFirstComponent = () => {
+return (
+<>
+<h1> hello world<?h1>
+</>
+)
+}
+export default MyFirstComponent;
